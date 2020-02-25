@@ -2,6 +2,7 @@ FROM php:7.1.8-apache
 
 MAINTAINER Arif Iqbal
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN docker-php-ext-install mysqli pdo pdo_mysql  
 
 COPY . /srv/app
 COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
