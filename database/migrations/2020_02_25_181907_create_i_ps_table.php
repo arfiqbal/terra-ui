@@ -14,7 +14,7 @@ class CreateIPsTable extends Migration
     public function up()
     {
         Schema::create('ips', function (Blueprint $table) {
-            $table->increments('id')
+            $table->increments('id');
             $table->ipAddress('nic1');
             $table->ipAddress('nic2');
             $table->boolean('active');
