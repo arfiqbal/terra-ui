@@ -19,3 +19,4 @@ Route::get('/', function () {
 
 
 Route::get('/', 'VmController@index');
+Route::post('vm', 'VmController@store');

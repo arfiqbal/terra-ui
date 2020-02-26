@@ -19,9 +19,10 @@ class VmController extends Controller
     public function index()
     {
         $apps = Application::orderBy('id','DESC')->get();
-        $ips = IPs::orderBy('id','DESC')->where('active',1)->first();
+        $ips  = IPs::orderBy('id','ASC')->where('active',1)->first();
+        $available_ips  = IPs::orderBy('id','ASC')->where('active',1)->get();
        
-        return view('welcome',['apps' => $apps,'ips' => $ips]);
+        return view('welcome',['apps' => $apps,'ips' => $ips, 'available_ips' => $available_ips]);
     }
 
     /**
@@ -42,7 +43,7 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->toArray());
     }
 
     /**

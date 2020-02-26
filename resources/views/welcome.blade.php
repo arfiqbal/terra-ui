@@ -60,12 +60,20 @@
                         <div class="tab-content" id="pills-tabContent">
 
                           <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="row">
                             <div class="col-md-6">
-                                <form  class="form needs-validation" novalidate>
+                                <!-- <form method="POST" action="" class="" novalidate>
+                                    {{ csrf_field() }} -->
+                                {!! Form::open(array('url'=>'vm',
+                                                  'method' =>'POST',
+                                                  'class'=>'form needs-validation',
+                                                  
+                                                  'novalidate' 
+                                 )) !!}
 
                                 <div class="form-group">
                                     <label for="uname1">VM Name</label>
-                                    <input type="text" class="form-control" name="uname1" id="uname1" required="">
+                                    <input type="text" class="form-control" name="vmname" id="uname1" required="">
                                     <div class="invalid-feedback">Please enter vm-name</div>
                                 </div>
 
@@ -77,26 +85,26 @@
 
                                 <div class="form-group">
                                     <label for="ipAddress">Routeable IP (Nic1)</label>
-                                    <input type="text" class="form-control" name="routeableip" required="" id="ipAddress" ip-mask placeholder="000.000.000.000" value="{{$ips->nic1}}">
+                                    <input type="text" class="form-control" name="nic1" required="" id="ipAddress" ip-mask placeholder="000.000.000.000" value="{{$ips->nic1}}">
                                     <div class="invalid-feedback">Please enter valid IP range</div>
                                 </div>
                                 <div class="form-group">
                                     <label for="uname1">Non-Routeable IP (Nic2)</label>
-                                    <input type="text" class="form-control" name="nonrouteableip" id="ipAddress2" ip-mask placeholder="000.000.000.000" required="" value="{{$ips->nic2}}">
+                                    <input type="text" class="form-control" name="nic2" id="ipAddress2" ip-mask placeholder="000.000.000.000" required="" value="{{$ips->nic2}}">
                                     <div class="invalid-feedback">Please enter valid IP range</div>
                                 </div>
 
                                 
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Application</label>
-                                    <select class="form-control" name="uname1" id="uname1" required="">
-
+                                    <select class="form-control" name="app" id="uname1" required="">
+                                    <option >Select Application Image</option>
                                     @foreach ($apps as $app)
                                         <option value="{{$app->uid}}">{{$app->name}}</option>
                                     @endforeach
                                       
                                     </select>
-                                    <div class="invalid-feedback">Select Application </div>
+                                    <div class="invalid-feedback">Please select application </div>
                                   </div>
 
                                 
@@ -105,6 +113,36 @@
                             </form>
                                 
                             </div>
+                            <div class="col-md-6 float-right">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                      <th scope="col" colspan="3">Available IPs</th>
+                                      
+                                    </tr>
+                                  </thead>
+                                  <thead class="thead-dark">
+                                    <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Nic 1</th>
+                                      <th scope="col">Nic 2</th>
+                                      
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    @foreach ($available_ips as $ip)
+                                    <tr>
+                                      <th scope="row">{{$ip->id}}</th>
+                                      <td>{{$ip->nic1}}</td>
+                                      <td>{{$ip->nic2}}</td>
+                                      
+                                    </tr>
+                                    @endforeach
+                                  </tbody>
+                                </table>
+
+                            </div>
+                        </div>
                             
 
                               
