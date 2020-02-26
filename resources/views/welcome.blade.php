@@ -8,15 +8,15 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>Openstack</title>
   </head>
    
    <body>
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top" style="background-color: #ce3030 !important">
     <div class="container">
-      <a class="navbar-brand" href="#">Start Bootstrap</a>
+      <a class="navbar-brand" href="#">Vodafone</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -27,12 +27,7 @@
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
+          
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
           </li>
@@ -69,27 +64,40 @@
                                 <form  class="form needs-validation" novalidate>
 
                                 <div class="form-group">
-                                    <label for="uname1">Name</label>
+                                    <label for="uname1">VM Name</label>
                                     <input type="text" class="form-control" name="uname1" id="uname1" required="">
-                                    <div class="invalid-feedback">Please enter your username or email</div>
+                                    <div class="invalid-feedback">Please enter vm-name</div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="ipAddress">Routeable IP</label>
-                                    <input type="text" class="form-control" name="routeableip" required="" id="ipAddress" ip-mask placeholder="000.000.000.000">
-                                    <div class="invalid-feedback">Please enter valid IP range</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="uname1">Non-Routeable IP</label>
-                                    <input type="text" class="form-control" name="nonrouteableip" id="ipAddress2" ip-mask placeholder="000.000.000.000" required="">
-                                    <div class="invalid-feedback">Please enter valid IP range</div>
+                                    <label for="uname1">Email</label>
+                                    <input type="email" class="form-control" name="uname1" id="uname1" required="">
+                                    <div class="invalid-feedback">Please enter  email</div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="uname1">Application Image</label>
-                                    <input type="text" class="form-control" name="uname1" id="uname1" required="">
-                                    <div class="invalid-feedback">Please enter your username or email</div>
+                                    <label for="ipAddress">Routeable IP (Nic1)</label>
+                                    <input type="text" class="form-control" name="routeableip" required="" id="ipAddress" ip-mask placeholder="000.000.000.000" value="{{$ips->nic1}}">
+                                    <div class="invalid-feedback">Please enter valid IP range</div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="uname1">Non-Routeable IP (Nic2)</label>
+                                    <input type="text" class="form-control" name="nonrouteableip" id="ipAddress2" ip-mask placeholder="000.000.000.000" required="" value="{{$ips->nic2}}">
+                                    <div class="invalid-feedback">Please enter valid IP range</div>
+                                </div>
+
+                                
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Application</label>
+                                    <select class="form-control" name="uname1" id="uname1" required="">
+
+                                    @foreach ($apps as $app)
+                                        <option value="{{$app->uid}}">{{$app->name}}</option>
+                                    @endforeach
+                                      
+                                    </select>
+                                    <div class="invalid-feedback">Select Application </div>
+                                  </div>
 
                                 
 
