@@ -114,6 +114,7 @@
                                 
                             </div>
                             <div class="col-md-6 float-right">
+                                @if ($available_ips->count())
                                 <table class="table">
                                     <thead class="thead-dark">
                                     <tr>
@@ -123,7 +124,7 @@
                                   </thead>
                                   <thead class="thead-dark">
                                     <tr>
-                                      <th scope="col">#</th>
+                                      
                                       <th scope="col">Nic 1</th>
                                       <th scope="col">Nic 2</th>
                                       
@@ -132,7 +133,7 @@
                                   <tbody>
                                     @foreach ($available_ips as $ip)
                                     <tr>
-                                      <th scope="row">{{$ip->id}}</th>
+                                      
                                       <td>{{$ip->nic1}}</td>
                                       <td>{{$ip->nic2}}</td>
                                       
@@ -140,6 +141,9 @@
                                     @endforeach
                                   </tbody>
                                 </table>
+                                @else
+                                <h2>NO Ip found please contact mahesh</h2>
+                                @endif
 
                             </div>
                         </div>

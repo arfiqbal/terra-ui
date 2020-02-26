@@ -7,6 +7,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Application;
 use App\IPs;
+use File;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 
 class VmController extends Controller
@@ -43,7 +46,35 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->toArray());
+        
+        if(count($request)){
+
+            $dir = $request->vmname.'-'.uniqid();
+
+            $path = storage_path('app/'.$dir);
+
+            $template = public_path('template/template.tf');
+
+            //dd($template);
+
+            if(!File::isDirectory($path)){
+
+                File::makeDirectory($path, 0777, true, true);
+                File::copy($template, $path.'/main.tf');
+
+                $process = new Process('ls -lrth');
+                $process->setWorkingDirectory($path);
+                $process->setCommandLine('ls -lrth');
+                $process->run();
+                //dd($process->getOutput());
+
+
+            }else{
+
+                //File::makeDirectory($path, 0777, true, true);
+                Storage::copy($template, $path.'/main.tf');                
+            }
+        }
     }
 
     /**
