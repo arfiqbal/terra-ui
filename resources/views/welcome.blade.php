@@ -40,6 +40,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 ">
+                @if (session('vms'))
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  {{ session('vms') }} has been created successfully
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                @endif
                 <div class="card " >
                     <div class="card-header">
 
@@ -49,7 +57,7 @@
                           </li>
 
                           <li class="nav-item">
-                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Terminal</a>
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">All VM</a>
                           </li>
                           
                         </ul>
@@ -79,7 +87,7 @@
 
                                 <div class="form-group">
                                     <label for="uname1">Email</label>
-                                    <input type="email" class="form-control" name="uname1" id="uname1" required="">
+                                    <input type="email" class="form-control" name="email" id="uname1" required="">
                                     <div class="invalid-feedback">Please enter  email</div>
                                 </div>
 
@@ -91,16 +99,17 @@
                                 <div class="form-group">
                                     <label for="uname1">Non-Routeable IP (Nic2)</label>
                                     <input type="text" class="form-control" name="nic2" id="ipAddress2" ip-mask placeholder="000.000.000.000" required="" value="{{$ips->nic2}}">
+                                    <input type="hidden" name="ip_id" value="{{$ips->id}}">
                                     <div class="invalid-feedback">Please enter valid IP range</div>
                                 </div>
 
                                 
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Application</label>
-                                    <select class="form-control" name="app" id="uname1" required="">
-                                    <option >Select Application Image</option>
+                                    <select class="form-control" name="app" id="uname1" required>
+                                    <option value="">Select Application Image</option>
                                     @foreach ($apps as $app)
-                                        <option value="{{$app->uid}}">{{$app->name}}</option>
+                                        <option value="{{$app->id}}">{{$app->name}}</option>
                                     @endforeach
                                       
                                     </select>
@@ -114,7 +123,7 @@
                                 
                             </div>
                             <div class="col-md-6 float-right">
-                                @if ($available_ips->count())
+                                @if (count($available_ips))
                                 <table class="table">
                                     <thead class="thead-dark">
                                     <tr>
@@ -151,8 +160,40 @@
 
                               
                           </div>
-
+                            <!-- All VM -->
                           <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <table class="table table-hover table-striped" id="showVm">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Email</th>
+                                  <th scope="col">Nic 1</th>
+                                  <th scope="col">Nic 2</th>
+                                  <th scope="col">Application</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @if(count($allVM))
+                                    @foreach($allVM as $myVM)
+                                        <tr>
+                                          <th scope="row">{{$myVM->name}}</th>
+                                          <td>{{$myVM->email}}</td>
+                                          <td>{{$myVM->ips->nic1}}</td>
+                                          <td>{{$myVM->ips->nic2}}</td>
+                                          <td>{{$myVM->application->name}}</td>
+                                          <td>
+                                            <a href="" class="btn btn-danger "><img src="{{ asset('images/trash.svg') }}" alt="" width="24" height="24" title="DELETE VM"></a>
+
+                                            <a  class="btn btn-info showlog" data-toggle="modal" data-target="#logs{{$myVM->id}}" data-order="{{$myVM->id}}"><img src="{{ asset('images/eye-fill.svg') }}" alt="" width="24" height="24" title="View log"></a>
+                                           </td>
+                                        </tr>
+                                        
+                                    @endforeach
+                                @endif
+                                
+                              </tbody>
+                            </table>
                           </div>
                           
                         </div>
@@ -162,7 +203,23 @@
         </div>
     </div>
 
-
+    <!-- Modal -->
+<div class="modal fade modal-xl" id="mylogmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">View Log</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+      </div>
+      
+    </div>
+  </div>
+</div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -172,8 +229,32 @@
     <script src="{{ asset('js/bootstrap.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/ip.js') }}" crossorigin="anonymous"></script>
     <script>
+    // $.ajaxSetup({
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     }
+    // });
     $(document).ready(function(){
         $('[ip-mask]').ipAddress();
+
+        $('#showVm  .showlog').click(function(){
+                var id = $(this).attr('data-order');
+                //console.log(id);
+                $.get(
+                   '<?=URL::to("vm");?>',
+                   {'id': id },
+                  function(result){
+
+                    //console.log(result);
+
+                    if(result){
+                        $('.modal-body').html(result);
+                        $('#mylogmodal').modal();
+                    }
+                  }
+                );
+
+            })
     });
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {

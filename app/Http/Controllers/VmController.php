@@ -7,6 +7,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Application;
 use App\IPs;
+use App\VM;
+use Log;
 use File;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -24,8 +26,11 @@ class VmController extends Controller
         $apps = Application::orderBy('id','DESC')->get();
         $ips  = IPs::orderBy('id','ASC')->where('active',1)->first();
         $available_ips  = IPs::orderBy('id','ASC')->where('active',1)->get();
+        $allVM = VM::with('application','ips')->orderBy('id','DESC')->where('active',1)->get();
+
+        //dd($allVM->toArray());
        
-        return view('welcome',['apps' => $apps,'ips' => $ips, 'available_ips' => $available_ips]);
+        return view('welcome',['apps' => $apps,'ips' => $ips, 'available_ips' => $available_ips,'allVM' => $allVM]);
     }
 
     /**
@@ -46,34 +51,96 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request);
+        
         
         if(count($request)){
 
-            $dir = $request->vmname.'-'.uniqid();
+            //$dir = $request->vmname.'-'.uniqid();
+            $dir = $request->vmname;
 
             $path = storage_path('app/'.$dir);
+            Log::useFiles($path.'/output.log');
 
             $template = public_path('template/template.tf');
 
+            $app = Application::find($request->app);
+            $newvm = New VM;
+                        $newvm->ip_id = $request->ip_id;
+                        $newvm->application_id = $request->app;
+                        $newvm->dir = $dir;
+                        $newvm->name = $request->vmname;
+                        $newvm->email = $request->email;
+                        $newvm->active = 1;
+                        if($newvm->save()){
+
+                            $updateip = IPs::find($newvm->ip_id);
+                            $updateip->active = 0;
+                            $updateip->save(); 
+
+                            
+                            Log::info($request->vmname.'- VM created');
+
+                            return redirect('/')->with('vms', $newvm->name);
+                        }
+
+
             //dd($template);
 
-            if(!File::isDirectory($path)){
+            $command = 'terraform apply -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
 
-                File::makeDirectory($path, 0777, true, true);
-                File::copy($template, $path.'/main.tf');
+            // if(!File::isDirectory($path)){
 
-                $process = new Process('ls -lrth');
-                $process->setWorkingDirectory($path);
-                $process->setCommandLine('ls -lrth');
-                $process->run();
-                //dd($process->getOutput());
+            //     File::makeDirectory($path, 0777, true, true);
+            //     File::copy($template, $path.'/main.tf');
+
+            //     $process = new Process('terraform init');
+            //     $process->setTimeout(3600);
+            //     $process->setWorkingDirectory($path);
+            //     $process->run();
+            //     if ($process->isSuccessful()) {
+
+            //         $process->setCommandLine($command);
+            //         $process->run() ;
+            //         Log::debug($process->getOutput()); 
+
+            //             if (!$process->isSuccessful()) {
+                            
+            //                 Log::critical('Error occur while creating '.$request->vmname.'- VM');
+            //                 throw new ProcessFailedException($process);
+            //             }
+
+            //             $newvm = New VM;
+            //             $newvm->ip_id = $request->ip_id;
+            //             $newvm->application_id = $request->app;
+            //             $newvm->dir = $dir;
+            //             $newvm->name = $request->vmname;
+            //             $newvm->email = $request->email;
+            //             $newvm->active = 1;
+            //             if($newvm->save()){
+
+            //                 $updateip = IPs::find($newvm->ip_id);
+            //                 $updateip->active = 0;
+            //                 $updateip->save(); 
+
+                            
+            //                 Log::info($request->vmname.'- VM created');
+            //             }
 
 
-            }else{
 
-                //File::makeDirectory($path, 0777, true, true);
-                Storage::copy($template, $path.'/main.tf');                
-            }
+
+                        
+                    
+                
+            //     }else{
+            //             throw new ProcessFailedException($process);
+            //         }
+
+                
+
+
+            // }
         }
     }
 
@@ -83,9 +150,13 @@ class VmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        
+        $showVmLogs = VM::find($request->id);
+        $path = storage_path('app/'.$showVmLogs->dir.'/output.log');
+        return File::get($path);
+        
     }
 
     /**

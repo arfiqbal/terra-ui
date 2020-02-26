@@ -10,13 +10,27 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
+Route::get('/test', function () {
 
-Route::get('/', function () {
+     $process = new Process('ls -lrth');
+     
+     $process->run();
+     //dd($process->getIncrementalOutput());
 
-    return view('welcome');
+	foreach ($process as $type => $data) {
+
+	    if ($process::OUT === $type) {
+	        echo "\nRead from stdout: ".$data;
+	    } else { // $process::ERR === $type
+	        echo "\nRead from stderr: ".$data;
+	    }
+	}
 });
 
 
 Route::get('/', 'VmController@index');
 Route::post('vm', 'VmController@store');
+Route::get('vm', 'VmController@show')->name('showVmLogs');
