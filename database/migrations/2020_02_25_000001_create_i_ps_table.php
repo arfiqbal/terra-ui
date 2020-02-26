@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVMsTable extends Migration
+class CreateIPsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateVMsTable extends Migration
      */
     public function up()
     {
-        Schema::create('v_ms', function (Blueprint $table) {
+        Schema::create('ips', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->ipAddress('nic1');
+            $table->ipAddress('nic2');
+            $table->boolean('active');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateVMsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('v_ms');
+        Schema::dropIfExists('ips');
     }
 }
