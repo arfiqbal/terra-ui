@@ -65,7 +65,52 @@ class VmController extends Controller
             $template = public_path('template/template.tf');
 
             $app = Application::find($request->app);
-            $newvm = New VM;
+            // $newvm = New VM;
+            //             $newvm->ip_id = $request->ip_id;
+            //             $newvm->application_id = $request->app;
+            //             $newvm->dir = $dir;
+            //             $newvm->name = $request->vmname;
+            //             $newvm->email = $request->email;
+            //             $newvm->active = 1;
+            //             if($newvm->save()){
+
+            //                 $updateip = IPs::find($newvm->ip_id);
+            //                 $updateip->active = 0;
+            //                 $updateip->save(); 
+
+                            
+            //                 Log::info($request->vmname.'- VM created');
+
+            //                 return redirect('/')->with('vms', $newvm->name);
+            //             }
+
+
+            //dd($template);
+
+            $command = 'terraform apply -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
+
+            if(!File::isDirectory($path)){
+
+                File::makeDirectory($path, 0777, true, true);
+                File::copy($template, $path.'/main.tf');
+
+                $process = new Process('terraform init');
+                $process->setTimeout(3600);
+                $process->setWorkingDirectory($path);
+                $process->run();
+                if ($process->isSuccessful()) {
+
+                    $process->setCommandLine($command);
+                    $process->run() ;
+                    Log::debug($process->getOutput()); 
+
+                        if (!$process->isSuccessful()) {
+                            
+                            Log::critical('Error occur while creating '.$request->vmname.'- VM');
+                            throw new ProcessFailedException($process);
+                        }
+
+                        $newvm = New VM;
                         $newvm->ip_id = $request->ip_id;
                         $newvm->application_id = $request->app;
                         $newvm->dir = $dir;
@@ -85,62 +130,19 @@ class VmController extends Controller
                         }
 
 
-            //dd($template);
-
-            $command = 'terraform apply -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
-
-            // if(!File::isDirectory($path)){
-
-            //     File::makeDirectory($path, 0777, true, true);
-            //     File::copy($template, $path.'/main.tf');
-
-            //     $process = new Process('terraform init');
-            //     $process->setTimeout(3600);
-            //     $process->setWorkingDirectory($path);
-            //     $process->run();
-            //     if ($process->isSuccessful()) {
-
-            //         $process->setCommandLine($command);
-            //         $process->run() ;
-            //         Log::debug($process->getOutput()); 
-
-            //             if (!$process->isSuccessful()) {
-                            
-            //                 Log::critical('Error occur while creating '.$request->vmname.'- VM');
-            //                 throw new ProcessFailedException($process);
-            //             }
-
-            //             $newvm = New VM;
-            //             $newvm->ip_id = $request->ip_id;
-            //             $newvm->application_id = $request->app;
-            //             $newvm->dir = $dir;
-            //             $newvm->name = $request->vmname;
-            //             $newvm->email = $request->email;
-            //             $newvm->active = 1;
-            //             if($newvm->save()){
-
-            //                 $updateip = IPs::find($newvm->ip_id);
-            //                 $updateip->active = 0;
-            //                 $updateip->save(); 
-
-                            
-            //                 Log::info($request->vmname.'- VM created');
-            //             }
-
-
 
 
                         
                     
                 
-            //     }else{
-            //             throw new ProcessFailedException($process);
-            //         }
+                }else{
+                        throw new ProcessFailedException($process);
+                    }
 
                 
 
 
-            // }
+            }
         }
     }
 
@@ -191,24 +193,24 @@ class VmController extends Controller
     public function destroy($id)
     {
         $deleteVM = VM::find($id);
-        $deleteVM->active = 0;
-            if($deleteVM->save()){
-                return $deleteVM->id;
-            }
-
-        // $path = storage_path('app/'.$deleteVM->dir);
-        // $process = new Process('terraform destroy');
-        // $process->setTimeout(3600);
-        // $process->setWorkingDirectory($path);
-        // $process->run();
-        // if ($process->isSuccessful()) {
-
-
-        //     $deleteVM->active = 0;
+        // $deleteVM->active = 0;
         //     if($deleteVM->save()){
         //         return $deleteVM->id;
         //     }
-        // }
+
+        $path = storage_path('app/'.$deleteVM->dir);
+        $process = new Process('terraform destroy');
+        $process->setTimeout(3600);
+        $process->setWorkingDirectory($path);
+        $process->run();
+        if ($process->isSuccessful()) {
+
+
+            $deleteVM->active = 0;
+            if($deleteVM->save()){
+                return $deleteVM->id;
+            }
+        }
 
 
         
