@@ -203,11 +203,14 @@ class VmController extends Controller
         $process->setTimeout(3600);
         $process->setWorkingDirectory($path);
         $process->run();
+        Log::debug($process->getOutput()); 
         if ($process->isSuccessful()) {
 
 
             $deleteVM->active = 0;
             if($deleteVM->save()){
+
+                Log::info($deleteVM->vmname.'- VM deleted');
                 return $deleteVM->id;
             }
         }
