@@ -34,3 +34,4 @@ Route::get('/test', function () {
 Route::get('/', 'VmController@index');
 Route::post('vm', 'VmController@store');
 Route::get('vm', 'VmController@show')->name('showVmLogs');
+Route::post('vm/{id}', 'VmController@destroy')->name('deletevm');

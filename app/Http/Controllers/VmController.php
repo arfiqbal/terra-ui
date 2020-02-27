@@ -190,6 +190,27 @@ class VmController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleteVM = VM::find($id);
+        $deleteVM->active = 0;
+            if($deleteVM->save()){
+                return $deleteVM->id;
+            }
+
+        // $path = storage_path('app/'.$deleteVM->dir);
+        // $process = new Process('terraform destroy');
+        // $process->setTimeout(3600);
+        // $process->setWorkingDirectory($path);
+        // $process->run();
+        // if ($process->isSuccessful()) {
+
+
+        //     $deleteVM->active = 0;
+        //     if($deleteVM->save()){
+        //         return $deleteVM->id;
+        //     }
+        // }
+
+
+        
     }
 }

@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" crossorigin="anonymous">
 
@@ -176,14 +176,17 @@
                               <tbody>
                                 @if(count($allVM))
                                     @foreach($allVM as $myVM)
-                                        <tr>
+                                        <tr id="{{$myVM->id}}">
                                           <th scope="row">{{$myVM->name}}</th>
                                           <td>{{$myVM->email}}</td>
                                           <td>{{$myVM->ips->nic1}}</td>
                                           <td>{{$myVM->ips->nic2}}</td>
                                           <td>{{$myVM->application->name}}</td>
                                           <td>
-                                            <a href="" class="btn btn-danger "><img src="{{ asset('images/trash.svg') }}" alt="" width="24" height="24" title="DELETE VM"></a>
+                                            
+                                            <a  class="btn btn-danger deletevm" data-order="{{ $myVM->name }}"
+                                            data-order_destroy_route="{{ route('deletevm', ['id' => $myVM->id]) }}"><img src="{{ asset('images/trash.svg') }}" alt="" width="24" height="24" title="DELETE VM"></a>
+                                            
 
                                             <a  class="btn btn-info showlog" data-toggle="modal" data-target="#logs{{$myVM->id}}" data-order="{{$myVM->id}}"><img src="{{ asset('images/eye-fill.svg') }}" alt="" width="24" height="24" title="View log"></a>
                                            </td>
@@ -229,11 +232,11 @@
     <script src="{{ asset('js/bootstrap.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/ip.js') }}" crossorigin="anonymous"></script>
     <script>
-    // $.ajaxSetup({
-    //     headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //     }
-    // });
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $(document).ready(function(){
         $('[ip-mask]').ipAddress();
 
@@ -254,7 +257,40 @@
                   }
                 );
 
-            })
+        })
+
+        $('#showVm tr td .deletevm').on('click', function(){
+                var order = $(this).attr('data-order');
+                var orderRoute = $(this).attr('data-order_destroy_route');
+
+                console.log(order);
+
+               deleteOrder(order ,orderRoute);
+            });
+
+            var deleteOrder = function(order,orderRoute)
+            {
+               var ask =  confirm("Are you absolutely sure you want to delete " + order + "? This action cannot be undone." +
+            "This will permanently delete " + order + ", and remove all collections and resources associated with it.");
+
+               if(ask == true)
+               {
+
+                    $.ajax({
+                        type:'POST',
+                        url: orderRoute,
+                          
+                        }).done(function(data) {
+                          console.log(data)
+                          $('#'+data).hide();
+                          //alert('Deleted');
+                          
+                    }).fail(function() {
+                        
+                    })
+                   
+               }
+            }
     });
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function() {
