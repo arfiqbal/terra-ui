@@ -30,13 +30,20 @@ Route::get('/test', function () {
 	// }
 	$path = public_path('template1');
 	$process = new Process('terraform init -input=false');
-	//$process = new Process('ls -lrtha');
+	$process = new Process('ls -lrtha');
 	//$process->setTimeout(3600);
     $process->setWorkingDirectory($path);
     $process->run();
     $process->setCommandLine('terraform apply -auto-approve');
     $process->run() ;
-    echo $process->getOutput();
+    foreach ($process as $type => $data) {
+
+	    if ($process::OUT === $type) {
+	        echo "\nRead from stdout: ".$data;
+	    } else { // $process::ERR === $type
+	        echo "\nRead from stderr: ".$data;
+	    }
+	}
 
 
 });
