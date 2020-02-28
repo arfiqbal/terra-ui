@@ -28,11 +28,12 @@ Route::get('/test', function () {
 	//         echo "\nRead from stderr: ".$data;
 	//     }
 	// }
-	$path = public_path('template');
+	$path = public_path('template1');
 	$process = new Process('terraform init -input=false');
 	$process->setTimeout(3600);
     $process->setWorkingDirectory($path);
     $process->run();
+    dd($process->getOutput());
 
 
 });
