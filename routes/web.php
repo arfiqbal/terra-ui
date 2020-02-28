@@ -29,7 +29,8 @@ Route::get('/test', function () {
 	//     }
 	// }
 	$path = public_path('template1');
-	$process = new Process('terraform init -input=false');
+	//$process = new Process('terraform init -input=false');
+	$process = new Process('ls -lrtha');
 	$process->setTimeout(3600);
     $process->setWorkingDirectory($path);
     $process->run();
