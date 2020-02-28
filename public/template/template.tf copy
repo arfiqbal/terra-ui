@@ -14,15 +14,15 @@ provider "openstack" {
 
 resource "openstack_blockstorage_volume_v1" "volume_1" {
 
-  name        = var.vmname
-  description = var.vmname
+  name        = "${var.vmname}"
+  description = "${var.vmname}"
   size        = 260
-  image_id    = var.app
+  image_id    = "${var.app}"
 }
 
 resource "openstack_compute_instance_v2" "cpns" {
-  name            = var.vmname
-  block_device {
+  name            = "${var.vmname}"
+  block_device    {
     boot_index      = 0
     source_type     = "volume"
     destination_type  = "volume"
@@ -35,17 +35,17 @@ resource "openstack_compute_instance_v2" "cpns" {
 
 
   metadata = {
-       key = var.emailid,
+       key = "${var.emailid}",
   }
 
   network {
     name = "nr_provider"
-    fixed_ip_v4    = var.nic1
+    fixed_ip_v4    = "${var.nic1}"
   }
 
   network {
     name = "vssi_routable"
-     fixed_ip_v4    = var.nic2
+     fixed_ip_v4    = "${var.nic2}"
   }
 
 }
@@ -56,12 +56,17 @@ output "VM-Name" {
 }
 
 output "VM-ip" {
-  value = "${openstack_compute_instance_v2.cpns.network.*.fixed_ip_v4},${openstack_compute_instance_v2.cpns.network.*.fixed_ip_v4}"
+  value = "${openstack_compute_instance_v2.cpns.network.0.fixed_ip_v4},${openstack_compute_instance_v2.cpns.network.1.fixed_ip_v4}"
 }
 
+output "VM-securitygroup" {
+  value = "${openstack_compute_instance_v2.cpns.security_groups.4129694193}"
+}
 
 output "Volume-Name" {
   value = "${openstack_blockstorage_volume_v1.volume_1.name}"
 }
 
- 
+output "User-MailID" {
+  value = "${openstack_compute_instance_v2.cpns.metadata.key}"
+}

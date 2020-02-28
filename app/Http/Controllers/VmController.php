@@ -56,8 +56,8 @@ class VmController extends Controller
         
         if(count($request)){
 
-            //$dir = $request->vmname.'-'.uniqid();
-            $dir = $request->vmname;
+            $dir = $request->vmname.'-'.uniqid();
+            //$dir = $request->vmname;
 
             $path = storage_path('app/'.$dir);
             Log::useFiles($path.'/output.log');
@@ -87,14 +87,14 @@ class VmController extends Controller
 
             //dd($template);
 
-            $command = 'terraform apply -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
+            $command = 'terraform apply -auto-approve -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
 
             if(!File::isDirectory($path)){
 
                 File::makeDirectory($path, 0777, true, true);
                 File::copy($template, $path.'/main.tf');
 
-                $process = new Process('terraform init');
+                $process = new Process('terraform init -input=false');
                 $process->setTimeout(3600);
                 $process->setWorkingDirectory($path);
                 $process->run();

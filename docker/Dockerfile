@@ -7,7 +7,6 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 RUN apt-get install wget unzip -y
 RUN wget https://releases.hashicorp.com/terraform/0.12.18/terraform_0.12.18_linux_amd64.zip
 RUN  unzip ./terraform_0.12.18_linux_amd64.zip -d /usr/local/bin/
-RUN terraform --version 
 COPY . /srv/app
 COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 

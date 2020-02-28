@@ -15,19 +15,19 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 Route::get('/test', function () {
 
-     $process = new Process('ls -lrth');
+ //     $process = new Process('ls -lrth /usr/local/bin');
      
-     $process->run();
-     //dd($process->getIncrementalOutput());
+ //     $process->run();
+ //     dd($process->getIncrementalOutput());
 
-	foreach ($process as $type => $data) {
+	// foreach ($process as $type => $data) {
 
-	    if ($process::OUT === $type) {
-	        echo "\nRead from stdout: ".$data;
-	    } else { // $process::ERR === $type
-	        echo "\nRead from stderr: ".$data;
-	    }
-	}
+	//     if ($process::OUT === $type) {
+	//         echo "\nRead from stdout: ".$data;
+	//     } else { // $process::ERR === $type
+	//         echo "\nRead from stderr: ".$data;
+	//     }
+	// }
 });
 
 
