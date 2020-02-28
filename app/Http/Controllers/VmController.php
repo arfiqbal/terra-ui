@@ -60,7 +60,7 @@ class VmController extends Controller
             //$dir = $request->vmname;
 
             $path = storage_path('app/'.$dir);
-            Log::useFiles($path.'/output.log');
+            
 
             $template = public_path('template/template.tf');
 
@@ -93,6 +93,7 @@ class VmController extends Controller
 
                 File::makeDirectory($path, 0777, true, true);
                 File::copy($template, $path.'/main.tf');
+                Log::useFiles($path.'/output.log');
 
                 $process = new Process('terraform init -input=false');
                 $process->setTimeout(3600);
@@ -129,10 +130,6 @@ class VmController extends Controller
                             return redirect('/')->with('vms', $newvm->name);
                         }
 
-
-
-
-                        
                     
                 
                 }else{
