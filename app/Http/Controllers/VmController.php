@@ -16,6 +16,12 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class VmController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *

@@ -49,7 +49,10 @@ Route::get('/test', function () {
 });
 
 
-Route::get('/', 'VmController@index');
+Route::get('create-vm', 'VmController@index');
 Route::post('vm', 'VmController@store');
 Route::get('vm', 'VmController@show')->name('showVmLogs');
 Route::post('vm/{id}', 'VmController@destroy')->name('deletevm');
+Auth::routes();
+
+Route::get('/', 'VmController@index')->name('home');

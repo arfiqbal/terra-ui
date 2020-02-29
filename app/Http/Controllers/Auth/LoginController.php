@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/create-vm';
 
     /**
      * Create a new controller instance.
@@ -36,4 +36,10 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    // public function logout(Request $request){
+    //     Auth::logout();
+       
+    //     return redirect()->route('login');
+    // }
 }
