@@ -8,7 +8,7 @@ provider "openstack" {
 }
 
 data "openstack_images_image_v2" "linux" {
-  
+  most_recent = true
 }
 
 
