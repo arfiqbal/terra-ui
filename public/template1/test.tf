@@ -1,8 +1,3 @@
-variable "app" {}
-variable "nic1" {}
-variable "nic2" {}
-variable "vmname" {}
-variable "emailid" {}
 
 
 provider "openstack" {
