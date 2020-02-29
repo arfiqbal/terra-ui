@@ -30,8 +30,8 @@ Route::get('/test', function () {
 	// }
 	$path = public_path('template1');
 	$process = new Process('terraform12 init -input=false');
-	$process = new Process('ls -lrtha');
-	//$process->setTimeout(3600);
+	//$process = new Process('ls -lrtha');
+	$process->setTimeout(3600);
     $process->setWorkingDirectory($path);
     $process->run();
     $process->setCommandLine('terraform12 apply -auto-approve -input=false');
