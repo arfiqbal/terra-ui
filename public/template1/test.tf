@@ -7,7 +7,7 @@ provider "openstack" {
   auth_url    = "http://10.85.49.148:5000/v2.0"
 }
 
-data "openstack_blockstorage_volume_v2" "volume_1" {
+data "openstack_images_image_v2" "linux" {
   
 }
 
