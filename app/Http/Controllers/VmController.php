@@ -21,7 +21,7 @@ class VmController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -93,7 +93,7 @@ class VmController extends Controller
 
             //dd($template);
 
-            $command = 'terraform apply -auto-approve -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
+            $command = 'terraform12 apply -auto-approve -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
 
             if(!File::isDirectory($path)){
 
@@ -101,7 +101,7 @@ class VmController extends Controller
                 File::copy($template, $path.'/main.tf');
                 Log::useFiles($path.'/output.log');
 
-                $process = new Process('terraform init -input=false');
+                $process = new Process('terraform12 init -input=false');
                 $process->setTimeout(3600);
                 $process->setWorkingDirectory($path);
                 $process->run();
@@ -202,7 +202,7 @@ class VmController extends Controller
         //     }
 
         $path = storage_path('app/'.$deleteVM->dir);
-        $process = new Process('terraform destroy');
+        $process = new Process('terraform12 destroy -auto-approve');
         $process->setTimeout(3600);
         $process->setWorkingDirectory($path);
         $process->run();

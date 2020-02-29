@@ -34,7 +34,7 @@ Route::get('/test', function () {
 	//$process->setTimeout(3600);
     $process->setWorkingDirectory($path);
     $process->run();
-    $process->setCommandLine('terraform apply -auto-approve -input=false');
+    $process->setCommandLine('terraform12 apply -auto-approve -input=false');
     $process->run() ;
     foreach ($process as $type => $data) {
 
