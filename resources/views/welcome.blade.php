@@ -82,7 +82,7 @@ Create VM | All VM
                                 </div>
 
                                
-                                 <form id="hide-vm">
+                                 <form id="hide-vm" class="form">
 
                                 <div class="form-group">
                                     <label for="uname1">VM Name</label>
@@ -207,7 +207,9 @@ Create VM | All VM
                             <!-- All VM -->
                           <div class="tab-pane fade" id="pills-terminal" role="tabpanel" aria-labelledby="pills-terminal-tab" style="color: #fff;background: #000">
                             <div class="container" id="terminal-body">
-                                asda
+                                <h2>Terminal</h2>
+
+                                <h3>No output detected</h3>
                             </div>
                           </div> <!-- All vM -->
                           
@@ -264,9 +266,8 @@ Create VM | All VM
           console.log(form[0].checkValidity());
           event.preventDefault()
           event.stopPropagation()
-          
+          form.addClass('was-validated');
         }else{
-          
           //=============ajax call=====================
 
           form.addClass('was-validated');
@@ -292,7 +293,7 @@ Create VM | All VM
                       $('#vmmessgae').hide();
                        $('#hide-vm').show();
                        console.log(data);
-                       //alert(vmname+ ' VM Created');
+                       alert(vmname+ ' VM Created');
                        
                        //location.reload(true);
                   }

@@ -59,8 +59,7 @@ class VmController extends Controller
     {
         dd($request->toArray());
         set_time_limit(0);
-        
-        
+
         if(count($request)){
 
             $dir = $request->vmname.'-'.uniqid();
@@ -76,7 +75,7 @@ class VmController extends Controller
 
             // dd($template);
 
-            // $command = 'terraform12 apply -auto-approve -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
+            $command = 'terraform12 apply -auto-approve -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
 
             if(!File::isDirectory($path)){
 
@@ -84,7 +83,7 @@ class VmController extends Controller
                 File::copy($template, $path.'/main.tf');
                 Log::useFiles($path.'/output.log');
 
-                $process = new Process('/usr/local/bin/terraform init -input=false');
+                $process = new Process($command);
                 $process->setTimeout(3600);
                 $process->setWorkingDirectory($path);
                 $process->run(function ($type, $buffer) {
@@ -106,7 +105,7 @@ class VmController extends Controller
 
                 if ($process->isSuccessful()) {
 
-                    $process->setCommandLine('/usr/local/bin/terraform apply -auto-approve');
+                    $process->setCommandLine('terraform12 apply -auto-approve');
                     $process->run(function ($type, $buffer) {
     
                     if (Process::ERR === $type) {
