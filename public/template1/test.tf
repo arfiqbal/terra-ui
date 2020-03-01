@@ -1,14 +1,12 @@
-
-
-provider "openstack" {
-  user_name   = "admin"
-  tenant_name = "cpns"
-  password    = "ayZma3wpahjHWgpjBRQypFUYK"
-  auth_url    = "http://10.85.49.148:5000/v2.0"
-}
-
-data "openstack_images_image_v2" "linux" {
-  most_recent = true
+provider "aws" {
+  access_key = "AKIAXC44LSQPRHEMNE57"
+  secret_key = "S7cfNT86KFoxUFpnT7XyCaTuWLYMv02vQc+v08M1"
+  region     = "us-east-2"
 }
 
 
+
+resource "aws_instance" "us_west_example" {
+  ami           = "ami-0fc20dd1da406780b"
+  instance_type = "t2.micro"
+}

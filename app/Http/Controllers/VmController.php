@@ -57,7 +57,8 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
+        dd($request->toArray());
+        set_time_limit(0);
         
         
         if(count($request)){
@@ -71,29 +72,11 @@ class VmController extends Controller
             $template = public_path('template/template.tf');
 
             $app = Application::find($request->app);
-            // $newvm = New VM;
-            //             $newvm->ip_id = $request->ip_id;
-            //             $newvm->application_id = $request->app;
-            //             $newvm->dir = $dir;
-            //             $newvm->name = $request->vmname;
-            //             $newvm->email = $request->email;
-            //             $newvm->active = 1;
-            //             if($newvm->save()){
+             
 
-            //                 $updateip = IPs::find($newvm->ip_id);
-            //                 $updateip->active = 0;
-            //                 $updateip->save(); 
+            // dd($template);
 
-                            
-            //                 Log::info($request->vmname.'- VM created');
-
-            //                 return redirect('/')->with('vms', $newvm->name);
-            //             }
-
-
-            //dd($template);
-
-            $command = 'terraform12 apply -auto-approve -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
+            // $command = 'terraform12 apply -auto-approve -var="nic1='.$request->nic1.'" -var="nic2='.$request->nic1.'" -var="vmname='.$request->vmname.'" -var="app='.$app->uid.'" -var="emailid='.$request->email.'"';
 
             if(!File::isDirectory($path)){
 
@@ -101,20 +84,51 @@ class VmController extends Controller
                 File::copy($template, $path.'/main.tf');
                 Log::useFiles($path.'/output.log');
 
-                $process = new Process('terraform12 init -input=false');
+                $process = new Process('/usr/local/bin/terraform init -input=false');
                 $process->setTimeout(3600);
                 $process->setWorkingDirectory($path);
-                $process->run();
+                $process->run(function ($type, $buffer) {
+    
+                    if (Process::ERR === $type) {
+                        
+                        
+                         echo $buffer."<br>";
+                         flush();
+                         
+                    } else {
+                        
+                         echo $buffer."<br>";
+                         flush();
+                         
+                    }
+               
+                });
+
                 if ($process->isSuccessful()) {
 
-                    $process->setCommandLine($command);
-                    $process->run() ;
+                    $process->setCommandLine('/usr/local/bin/terraform apply -auto-approve');
+                    $process->run(function ($type, $buffer) {
+    
+                    if (Process::ERR === $type) {
+                        
+                        
+                         echo $buffer."<br>";
+                         flush();
+                         
+                    } else {
+                        
+                         echo $buffer."<br>";
+                         flush();
+                         
+                    }
+               
+                });
                     Log::debug($process->getOutput()); 
 
                         if (!$process->isSuccessful()) {
                             
                             Log::critical('Error occur while creating '.$request->vmname.'- VM');
-                            throw new ProcessFailedException($process);
+                            // throw new ProcessFailedException($process);
                         }
 
                         $newvm = New VM;
@@ -133,13 +147,16 @@ class VmController extends Controller
                             
                             Log::info($request->vmname.'- VM created');
 
-                            return redirect('/')->with('vms', $newvm->name);
+                            echo "</br><br>";
+                            echo "================================================";
+                            echo $request->vmname.'- VM created successfully';
+                            echo "================================================";
                         }
 
                     
                 
                 }else{
-                        throw new ProcessFailedException($process);
+                        //throw new ProcessFailedException($process);
                     }
 
                 
