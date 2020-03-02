@@ -57,7 +57,7 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->toArray());
+        //dd($request->toArray());
         set_time_limit(0);
 
         if(count($request)){
@@ -126,7 +126,7 @@ class VmController extends Controller
 
                         if (!$process->isSuccessful()) {
                             
-                            Log::critical('Error occur while creating '.$request->vmname.'- VM');
+                            Log::critical($process->getOutput());
                             // throw new ProcessFailedException($process);
                         }
 
@@ -156,6 +156,7 @@ class VmController extends Controller
                 
                 }else{
                         //throw new ProcessFailedException($process);
+                        
                     }
 
                 

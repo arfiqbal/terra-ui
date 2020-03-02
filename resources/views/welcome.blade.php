@@ -209,7 +209,7 @@ Create VM | All VM
                             <div class="container" id="terminal-body">
                                 <h2>Terminal</h2>
 
-                                <h3>No output detected</h3>
+                                <h3>No output detected.</h3>
                             </div>
                           </div> <!-- All vM -->
                           
