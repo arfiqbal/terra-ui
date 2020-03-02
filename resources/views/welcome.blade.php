@@ -318,8 +318,10 @@ Create VM | All VM
                        $('#hide-vm').show();
                       // console.log(data);
                        //alert(vmname+ ' VM Created');
+                       setTimeout(function() {
+                        location.reload(true);
+                      }, 10000);
                        
-                       //location.reload(true);
                   }
                   
               })
@@ -379,10 +381,14 @@ Create VM | All VM
                         url: orderRoute,
                           
                         }).done(function(data) {
-                          console.log(data)
+                          //console.log(data)
                           $('#deleteModal').modal('hide');
-                          $('#'+data).hide();
-                          //alert('Deleted');
+                          //$('#'+data).hide();
+                          alert('VM Deleted');
+                          setTimeout(function() {
+                            location.reload(true);
+                          }, 10000);
+                          
                           
                     }).fail(function() {
                         

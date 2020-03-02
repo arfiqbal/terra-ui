@@ -155,9 +155,9 @@ class VmController extends Controller
                                 Log::info($request->vmname.'- VM created');
 
                                 echo "</br><br>";
-                                echo "================================================";
-                                echo $request->vmname.'- VM created successfully';
-                                echo "================================================";
+                                echo "======================================================= <br>";
+                                echo "====".$request->vmname."- VM created successfully =====";
+                                echo "=======================================================<br>";
                             }
 
                         }
@@ -230,15 +230,13 @@ class VmController extends Controller
         //     }
 
         $path = storage_path('app/'.$deleteVM->dir);
-        //$process = new Process('terraform12 destroy -auto-approve');
-        $process = new Process('ping -c 50 www.google.com');
+        $process = new Process('terraform12 destroy -auto-approve');
+        //$process = new Process('ping -c 50 www.google.com');
         $process->setTimeout(3600);
         $process->setWorkingDirectory($path);
         $process->run();
         Log::debug($process->getOutput()); 
         if ($process->isSuccessful()) {
-
-
             $deleteVM->active = 0;
             if($deleteVM->save()){
                 $releaseIP = IPs::find($deleteVM->ip_id);
