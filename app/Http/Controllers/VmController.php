@@ -57,8 +57,34 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->toArray());
+       
+        ob_implicit_flush(true);
+        ob_implicit_flush();
         set_time_limit(0);
+        
+        
+                $process = new Process('ping -c 20 www.google.com');
+                 $process->setTimeout(3600);
+                // $process->setWorkingDirectory($path);
+                $process->run(function ($type, $buffer) {
+    
+                    if (Process::ERR === $type) {
+                         echo $buffer."<br>";
+                            ob_flush();
+                            flush();
+                         
+                    } else {
+                        
+                         echo $buffer."<br>";
+                         ob_flush();
+                        flush();
+                         
+                    }
+                    
+                });
+                
+        dd($request->toArray());
+        
 
         if(count($request)){
 
@@ -91,13 +117,15 @@ class VmController extends Controller
                     if (Process::ERR === $type) {
                         
                         
-                         echo $buffer."<br>";
-                         flush();
+                        echo $buffer."<br>";
+                        ob_flush();
+                        flush();
                          
                     } else {
                         
-                         echo $buffer."<br>";
-                         flush();
+                        echo $buffer."<br>";
+                        ob_flush();
+                        flush();
                          
                     }
                
@@ -111,13 +139,15 @@ class VmController extends Controller
                     if (Process::ERR === $type) {
                         
                         
-                         echo $buffer."<br>";
-                         flush();
+                        echo $buffer."<br>";
+                        ob_flush();
+                        flush();
                          
                     } else {
                         
-                         echo $buffer."<br>";
-                         flush();
+                        echo $buffer."<br>";
+                        ob_flush();
+                        flush();
                          
                     }
                
@@ -128,28 +158,30 @@ class VmController extends Controller
                             
                             Log::critical($process->getOutput());
                             // throw new ProcessFailedException($process);
-                        }
+                        }else{
 
-                        $newvm = New VM;
-                        $newvm->ip_id = $request->ip_id;
-                        $newvm->application_id = $request->app;
-                        $newvm->dir = $dir;
-                        $newvm->name = $request->vmname;
-                        $newvm->email = $request->email;
-                        $newvm->active = 1;
-                        if($newvm->save()){
+                            $newvm = New VM;
+                            $newvm->ip_id = $request->ip_id;
+                            $newvm->application_id = $request->app;
+                            $newvm->dir = $dir;
+                            $newvm->name = $request->vmname;
+                            $newvm->email = $request->email;
+                            $newvm->active = 1;
+                            if($newvm->save()){
 
-                            $updateip = IPs::find($newvm->ip_id);
-                            $updateip->active = 0;
-                            $updateip->save(); 
+                                $updateip = IPs::find($newvm->ip_id);
+                                $updateip->active = 0;
+                                $updateip->save(); 
 
-                            
-                            Log::info($request->vmname.'- VM created');
+                                
+                                Log::info($request->vmname.'- VM created');
 
-                            echo "</br><br>";
-                            echo "================================================";
-                            echo $request->vmname.'- VM created successfully';
-                            echo "================================================";
+                                echo "</br><br>";
+                                echo "================================================";
+                                echo $request->vmname.'- VM created successfully';
+                                echo "================================================";
+                            }
+
                         }
 
                     

@@ -206,7 +206,7 @@ Create VM | All VM
 
                             <!-- All VM -->
                           <div class="tab-pane fade" id="pills-terminal" role="tabpanel" aria-labelledby="pills-terminal-tab" style="color: #fff;background: #000">
-                            <div class="container" id="terminal-body">
+                            <div class="container" id="terminal-body" style="padding: 3%;line-height: 30px">
                                 <h2>Terminal</h2>
 
                                 <h3>No output detected.</h3>
@@ -252,7 +252,7 @@ Create VM | All VM
     $(document).ready(function(){
       
       $("#launchVM").click(function(event) {
-        event.preventDefault()
+        //event.preventDefault()
         var vmname = $('#vmname').val();
             var email = $('#email').val();
             var nic1 = $('#ipAddress').val(); 
@@ -264,7 +264,7 @@ Create VM | All VM
         var form = $("#hide-vm")
     
         if (form[0].checkValidity() === false) {
-          console.log(form[0].checkValidity());
+          //console.log(form[0].checkValidity());
           event.preventDefault()
           event.stopPropagation()
           form.addClass('was-validated');
@@ -293,8 +293,8 @@ Create VM | All VM
                   success: function(data){
                       $('#vmmessgae').hide();
                        $('#hide-vm').show();
-                       console.log(data);
-                       alert(vmname+ ' VM Created');
+                      // console.log(data);
+                       //alert(vmname+ ' VM Created');
                        
                        //location.reload(true);
                   }
