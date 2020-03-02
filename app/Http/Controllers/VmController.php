@@ -63,7 +63,7 @@ class VmController extends Controller
         set_time_limit(0);
         
         
-                $process = new Process('ping -c 20 www.google.com');
+                $process = new Process('ping -c 20 10.85.58.90');
                  $process->setTimeout(3600);
                 // $process->setWorkingDirectory($path);
                 $process->run(function ($type, $buffer) {
