@@ -279,7 +279,7 @@ Create VM | All VM
               $.ajax({
                   type:'POST',
                   url: "<?= URL::to("vm");?>",
-                  data: {vmname :vmname, email:email, nic1 :nic1, nic2 :nic2, app :app},
+                  data: {vmname :vmname, email:email, nic1 :nic1, nic2 :nic2, app :app, ip_id :ip_id},
                   xhr: function () {
                       var xhr = $.ajaxSettings.xhr() ;
                       xhr.onprogress = function (e) {
