@@ -220,7 +220,30 @@ Create VM | All VM
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- delete Modal -->
+    
+
+    <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Deleting Vm</h5>
+            
+              <div class="spinner-border text-danger" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>We are deleting vm and it may take few min so please donot refresh the page</p>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+   
+    <!-- log Modal -->
 <div class="modal fade modal-xl" id="mylogmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
@@ -350,13 +373,14 @@ Create VM | All VM
 
                if(ask == true)
                {
-
+                    $('#deleteModal').modal('show');
                     $.ajax({
                         type:'POST',
                         url: orderRoute,
                           
                         }).done(function(data) {
                           console.log(data)
+                          $('#deleteModal').modal('hide');
                           $('#'+data).hide();
                           //alert('Deleted');
                           

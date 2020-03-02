@@ -223,13 +223,15 @@ class VmController extends Controller
     public function destroy($id)
     {
         $deleteVM = VM::find($id);
+        //dd($deleteVM->toArray());
         // $deleteVM->active = 0;
         //     if($deleteVM->save()){
         //         return $deleteVM->id;
         //     }
 
         $path = storage_path('app/'.$deleteVM->dir);
-        $process = new Process('terraform12 destroy -auto-approve');
+        //$process = new Process('terraform12 destroy -auto-approve');
+        $process = new Process('ping -c 50 www.google.com');
         $process->setTimeout(3600);
         $process->setWorkingDirectory($path);
         $process->run();
@@ -239,7 +241,10 @@ class VmController extends Controller
 
             $deleteVM->active = 0;
             if($deleteVM->save()){
-
+                $releaseIP = IPs::find($deleteVM->ip_id);
+                $releaseIP->active = 1;
+                $releaseIP->save();
+            
                 Log::info($deleteVM->vmname.'- VM deleted');
                 return $deleteVM->id;
             }
