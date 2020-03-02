@@ -283,7 +283,7 @@ Create VM | All VM
                   xhr: function () {
                       var xhr = $.ajaxSettings.xhr() ;
                       xhr.onprogress = function (e) {
-                          console.log(e.currentTarget.responseText);
+                          //console.log(e.currentTarget.responseText);
                           $('#terminal-body').html(e.currentTarget.responseText);  
                       }
                       

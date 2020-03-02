@@ -61,30 +61,6 @@ class VmController extends Controller
         ob_implicit_flush(true);
         ob_implicit_flush();
         set_time_limit(0);
-        
-        
-                $process = new Process('ping -c 20 10.85.58.90');
-                 $process->setTimeout(3600);
-                // $process->setWorkingDirectory($path);
-                $process->run(function ($type, $buffer) {
-    
-                    if (Process::ERR === $type) {
-                         echo $buffer."<br>";
-                            ob_flush();
-                            flush();
-                         
-                    } else {
-                        
-                         echo $buffer."<br>";
-                         ob_flush();
-                        flush();
-                         
-                    }
-                    
-                });
-                
-        dd($request->toArray());
-        
 
         if(count($request)){
 
