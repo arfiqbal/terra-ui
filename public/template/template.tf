@@ -50,18 +50,3 @@ resource "openstack_compute_instance_v2" "cpns" {
 
 }
 
-
-output "VM-Name" {
-  value = "${openstack_compute_instance_v2.cpns.name}"
-}
-
-output "VM-ip" {
-  value = "${openstack_compute_instance_v2.cpns.network.*.fixed_ip_v4},${openstack_compute_instance_v2.cpns.network.*.fixed_ip_v4}"
-}
-
-
-output "Volume-Name" {
-  value = "${openstack_blockstorage_volume_v1.volume_1.name}"
-}
-
- 
