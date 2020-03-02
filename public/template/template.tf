@@ -26,7 +26,7 @@ resource "openstack_compute_instance_v2" "cpns" {
     boot_index      = 0
     source_type     = "volume"
     destination_type  = "volume"
-    uuid            = "${openstack_blockstorage_volume_v1.volume_1.id}"
+    uuid            = openstack_blockstorage_volume_v1.volume_1.id
   }
 
   flavor_id       = "58420862-09c7-4c38-8b2e-269ca24a66ad"
