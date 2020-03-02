@@ -10,6 +10,7 @@ use App\IPs;
 use App\VM;
 use Log;
 use File;
+use Storage;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -57,10 +58,11 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
-       
+        ini_set('max_execution_time', 3600);
         ob_implicit_flush(true);
         ob_implicit_flush();
         set_time_limit(0);
+        
 
         if(count($request)){
 

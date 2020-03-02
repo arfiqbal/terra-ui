@@ -5,9 +5,10 @@ variable "vmname" {}
 variable "emailid" {}
 
 
+
 provider "openstack" {
   user_name   = "admin"
-  tenant_name = "admin"
+  tenant_name = "cpns"
   password    = "ayZma3wpahjHWgpjBRQypFUYK"
   auth_url    = "http://10.85.49.148:5000/v2.0"
 }
@@ -35,7 +36,7 @@ resource "openstack_compute_instance_v2" "cpns" {
 
 
   metadata = {
-       key = var.emailid,
+       key = var.emailid
   }
 
   network {
