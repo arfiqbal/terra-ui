@@ -7,7 +7,7 @@ variable "emailid" {}
 
 provider "openstack" {
   user_name   = "admin"
-  tenant_name = "cpns"
+  tenant_name = "admin"
   password    = "ayZma3wpahjHWgpjBRQypFUYK"
   auth_url    = "http://10.85.49.148:5000/v2.0"
 }
@@ -16,7 +16,7 @@ resource "openstack_blockstorage_volume_v1" "volume_1" {
 
   name        = var.vmname
   description = var.vmname
-  size        = 260
+  size        = 160
   image_id    = var.app
 }
 
