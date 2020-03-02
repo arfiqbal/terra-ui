@@ -57,7 +57,7 @@ class VmController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->toArray());
+        //dd($request->toArray());
         set_time_limit(0);
 
         if(count($request)){
