@@ -104,7 +104,7 @@ Create VM | All VM
                                 <div class="form-group">
                                     <label for="uname1">Non-Routeable IP (Nic2)</label>
                                     <input type="text" class="form-control"  id="ipAddress2" ip-mask placeholder="000.000.000.000" required value="{{$ips->nic2}}">
-                                    <input type="hidden" name="ip_id" value="{{$ips->id}}">
+                                    <input type="hidden" id="ip_id" value="{{$ips->id}}">
                                     <div class="invalid-feedback">Please enter valid IP range</div>
                                 </div>
 
@@ -257,7 +257,8 @@ Create VM | All VM
             var email = $('#email').val();
             var nic1 = $('#ipAddress').val(); 
             var nic2 = $('#ipAddress2').val();
-             var app = $('#app option:selected').val();
+            var ip_id = $('#ip_id').val();
+            var app = $('#app option:selected').val();
 
         // Fetch form to apply custom Bootstrap validation
         var form = $("#hide-vm")
