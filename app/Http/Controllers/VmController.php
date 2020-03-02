@@ -83,7 +83,7 @@ class VmController extends Controller
                 File::copy($template, $path.'/main.tf');
                 Log::useFiles($path.'/output.log');
 
-                $process = new Process($command);
+                $process = new Process('terraform12 init -input=false');
                 $process->setTimeout(3600);
                 $process->setWorkingDirectory($path);
                 $process->run(function ($type, $buffer) {
@@ -102,10 +102,10 @@ class VmController extends Controller
                     }
                
                 });
-
+                Log::debug($process->getOutput());
                 if ($process->isSuccessful()) {
 
-                    $process->setCommandLine('terraform12 apply -auto-approve');
+                    $process->setCommandLine($command);
                     $process->run(function ($type, $buffer) {
     
                     if (Process::ERR === $type) {
